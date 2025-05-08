@@ -100,19 +100,11 @@ describe('ChatController (e2e)', () => {
         expect(flightToolResult.result).toHaveProperty('flight_time'); // Verificar existencia
       }
     } else {
-      // Si no hay toolResults, pero esperábamos una llamada a herramienta, esto es un problema.
-      // Podríamos querer que el test falle aquí si es mandatorio que la herramienta sea llamada.
-      // Por ahora, la aserción sobre `response.body.text` capturará el fallo si el texto no es el esperado.
       console.warn(
         '[Flight Info Test] Warning: toolResults was empty or undefined. The LLM might not have called the tool, or an issue occurred.',
       );
     }
 
-    // Esta es la aserción que originalmente fallaba porque response.body.text era "".
-    // Si la herramienta se ejecutó correctamente (verificado arriba),
-    // y `text` sigue siendo "", entonces el LLM no está generando
-    // el texto esperado después de procesar el resultado de la herramienta.
-    // Esto sigue indicando un problema en la respuesta generada.
     expect(response.body.text).toMatch(/flight|airline|Delta|DL123/i);
   }, 15000); // Increased timeout to 15 seconds
 
